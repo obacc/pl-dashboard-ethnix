@@ -11,61 +11,287 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
+        :root {
+            --blue-dark: #002333;
+            --blue-deep: #003049;
+            --blue-medium: #01577c;
+            --red-accent: #d62828;
+            --orange-accent: #f77f00;
+            --yellow-gold: #fcbf49;
+            --cream-light: #eae2b7;
+            --green-positive: #28a745;
+            --red-negative: #dc3545;
         }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f7fa;
+            color: #002333;
+            line-height: 1.6;
+        }
+
+        /* HEADER MODERNO */
         .header {
-            background-color: #1e3a5f;
+            background: linear-gradient(135deg, #002333 0%, #01577c 100%);
             color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 35, 51, 0.12);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #fcbf49 0%, #f77f00 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #002333;
+            box-shadow: 0 2px 8px rgba(252, 191, 73, 0.3);
+        }
+
+        .header-text {
+            flex: 1;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .header .subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .period-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* METRICS CARDS */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 35, 51, 0.1);
+            transition: all 0.2s ease;
+            border-left: 4px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 35, 51, 0.12);
+        }
+
+        .metric-card.net-income { border-left-color: var(--green-positive); }
+        .metric-card.ebitda { border-left-color: var(--blue-medium); }
+        .metric-card.gross-margin { border-left-color: var(--yellow-gold); }
+        .metric-card.coverage { border-left-color: #6c757d; }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .metric-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .metric-icon.net-income { background: linear-gradient(135deg, #28a745, #20c997); }
+        .metric-icon.ebitda { background: linear-gradient(135deg, #01577c, #003049); }
+        .metric-icon.gross-margin { background: linear-gradient(135deg, #fcbf49, #f77f00); }
+        .metric-icon.coverage { background: linear-gradient(135deg, #6c757d, #495057); }
+
+        .metric-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6c757d;
             font-weight: 600;
         }
 
-        .controls {
-            background-color: white;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            font-variant-numeric: tabular-nums;
+            margin: 0.5rem 0;
+        }
+
+        .metric-change {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .metric-change.positive { color: var(--green-positive); }
+        .metric-change.negative { color: var(--red-negative); }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.75rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-medium), var(--blue-deep));
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        /* CONTROLS SECTION */
+        .controls-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 35, 51, 0.1);
         }
 
         .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+            margin-bottom: 1.5rem;
         }
 
-        .control-group label {
-            font-size: 12px;
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6c757d;
             font-weight: 600;
-            color: #666;
+            margin-bottom: 0.75rem;
+            display: block;
         }
 
-        .control-group select {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            min-width: 200px;
+        .pills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
-        .table-container {
-            margin: 20px;
-            background-color: white;
+        .pill {
+            padding: 0.5rem 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 20px;
+            background: white;
+            color: var(--blue-dark);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .pill:hover {
+            border-color: var(--blue-medium);
+            background: #f8f9fa;
+        }
+
+        .pill.active {
+            background: var(--blue-medium);
+            border-color: var(--blue-medium);
+            color: white;
+        }
+
+        /* TABLE SECTION */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 35, 51, 0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--blue-dark);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .table-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: #f8f9fa;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .table-btn:hover {
+            background: var(--blue-medium);
+            color: white;
+        }
+
+        .table-wrapper {
             overflow-x: auto;
         }
 
@@ -75,150 +301,283 @@
         }
 
         thead {
-            background-color: #1e3a5f;
+            background: linear-gradient(135deg, #002333 0%, #003049 100%);
             color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         th {
-            padding: 12px;
+            padding: 1rem;
             text-align: right;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 0.875rem;
             white-space: nowrap;
         }
 
         th:first-child {
             text-align: left;
+            position: sticky;
+            left: 0;
+            background: linear-gradient(135deg, #002333 0%, #003049 100%);
+            z-index: 11;
         }
 
         tbody tr {
-            border-bottom: 1px solid #eee;
-        }
-
-        tbody tr.total-row {
-            background-color: #ffeaa7;
-            font-weight: 600;
+            border-bottom: 1px solid #e9ecef;
+            transition: background 0.2s ease;
         }
 
         tbody tr:hover {
-            background-color: #f8f9fa;
+            background: #f8f9fa;
+        }
+
+        tbody tr.total-row {
+            background: rgba(252, 191, 73, 0.15);
+            font-weight: 600;
+        }
+
+        tbody tr.percent-row {
+            background: rgba(1, 87, 124, 0.1);
+        }
+
+        tbody tr.subcategory-row {
+            background: rgba(234, 226, 183, 0.3);
+        }
+
+        tbody tr.subcategory-row:hover {
+            background: rgba(234, 226, 183, 0.5);
         }
 
         td {
-            padding: 10px 12px;
+            padding: 0.75rem 1rem;
             text-align: right;
-            font-size: 13px;
+            font-size: 0.875rem;
+            font-variant-numeric: tabular-nums;
         }
 
         td:first-child {
             text-align: left;
             font-weight: 600;
+            position: sticky;
+            left: 0;
+            background: inherit;
+            z-index: 1;
+        }
+
+        .category-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .expand-icon {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+            color: var(--blue-medium);
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
         }
 
         .subcategory {
-            padding-left: 30px !important;
+            padding-left: 3rem !important;
             font-weight: 400;
-            font-size: 12px;
+            font-size: 0.8125rem;
         }
 
         .positive {
-            color: #28a745;
+            color: var(--green-positive);
         }
 
         .negative {
-            color: #dc3545;
+            color: var(--red-negative);
         }
 
+        /* LOADING & ERROR */
         .loading {
             text-align: center;
-            padding: 40px;
-            color: #666;
+            padding: 3rem;
+            color: #6c757d;
         }
 
         .error {
-            background-color: #f8d7da;
+            background: #f8d7da;
             color: #721c24;
-            padding: 15px;
-            margin: 20px;
-            border-radius: 4px;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem;
+            border-radius: 8px;
             border: 1px solid #f5c6cb;
         }
 
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .controls {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pills-container {
                 flex-direction: column;
             }
 
-            .control-group select {
+            .pill {
                 width: 100%;
+                text-align: center;
             }
 
-            .table-container {
-                margin: 10px;
+            .table-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
             }
 
             table {
-                font-size: 11px;
+                font-size: 0.75rem;
             }
 
             th, td {
-                padding: 8px 6px;
+                padding: 0.5rem 0.5rem;
+            }
+
+            .metric-value {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Ethnix Group - P&L USD</h1>
-    </div>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">E</div>
+            <div class="header-text">
+                <h1>Ethnix Group</h1>
+                <div class="subtitle">P&L Dashboard - USD</div>
+            </div>
+            <div class="period-badge" id="periodBadge">2024 - YTD</div>
+        </div>
+    </header>
 
-    <div class="controls">
-        <div class="control-group">
-            <label for="tipoVista">Tipo Vista</label>
-            <select id="tipoVista">
-                <option value="general">General</option>
-                <option value="detallado">Detallado</option>
-            </select>
+    <div class="container">
+        <!-- METRICS CARDS -->
+        <div class="metrics-grid" id="metricsGrid">
+            <div class="metric-card net-income">
+                <div class="metric-header">
+                    <div class="metric-label">Net Income</div>
+                    <div class="metric-icon net-income">💰</div>
+                </div>
+                <div class="metric-value" id="netIncomeValue">-</div>
+                <div class="metric-change" id="netIncomeChange">-</div>
+            </div>
+            <div class="metric-card ebitda">
+                <div class="metric-header">
+                    <div class="metric-label">EBITDA</div>
+                    <div class="metric-icon ebitda">📊</div>
+                </div>
+                <div class="metric-value" id="ebitdaValue">-</div>
+                <div class="metric-change" id="ebitdaChange">-</div>
+            </div>
+            <div class="metric-card gross-margin">
+                <div class="metric-header">
+                    <div class="metric-label">Gross Margin</div>
+                    <div class="metric-icon gross-margin">📈</div>
+                </div>
+                <div class="metric-value" id="grossMarginValue">-</div>
+                <div class="metric-change" id="grossMarginChange">-</div>
+            </div>
+            <div class="metric-card coverage">
+                <div class="metric-header">
+                    <div class="metric-label">YTD Coverage</div>
+                    <div class="metric-icon coverage">🎯</div>
+                </div>
+                <div class="metric-value" id="coverageValue">-</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="coverageProgress" style="width: 0%"></div>
+                </div>
+            </div>
         </div>
-        <div class="control-group">
-            <label for="periodo">Periodo</label>
-            <select id="periodo">
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <label for="centroDistribucion">Centro Distribución</label>
-            <select id="centroDistribucion">
-                <option value="todos">Todos</option>
-                <option value="lima">Lima</option>
-            </select>
-        </div>
-    </div>
 
-    <div class="table-container">
-        <div id="loading" class="loading">Cargando datos...</div>
-        <div id="error" class="error" style="display: none;"></div>
-        <table id="plTable" style="display: none;">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Col 1</th>
-                    <th>Col 2</th>
-                    <th>Col 3</th>
-                    <th>Budget</th>
-                    <th>Cober %</th>
-                    <th>VS B $</th>
-                    <th>VS B %</th>
-                    <th>YTD</th>
-                    <th>YTD Budget</th>
-                    <th>Var</th>
-                    <th>Var %</th>
-                </tr>
-            </thead>
-            <tbody id="plTableBody">
-            </tbody>
-        </table>
+        <!-- CONTROLS SECTION -->
+        <div class="controls-section">
+            <div class="control-group">
+                <label class="control-label">Tipo Vista</label>
+                <div class="pills-container" id="tipoVistaPills">
+                    <div class="pill active" data-value="general">General</div>
+                    <div class="pill" data-value="semanal">Semanal</div>
+                    <div class="pill" data-value="4semanas">4 Semanas</div>
+                    <div class="pill" data-value="budget">Budget</div>
+                    <div class="pill" data-value="forecast">Forecast</div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Período</label>
+                <div class="pills-container" id="periodoPills">
+                    <div class="pill active" data-value="ytd">YTD</div>
+                    <div class="pill" data-value="q1">Q1</div>
+                    <div class="pill" data-value="q2">Q2</div>
+                    <div class="pill" data-value="q3">Q3</div>
+                    <div class="pill" data-value="q4">Q4</div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Centro Distribución</label>
+                <div class="pills-container" id="centroDistribucionPills">
+                    <div class="pill active" data-value="todos">Todos</div>
+                    <div class="pill" data-value="limena">Limeña</div>
+                    <div class="pill" data-value="subdist">Subdist</div>
+                    <div class="pill" data-value="dsd">DSD</div>
+                    <div class="pill" data-value="bar-s">BAR-S</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLE SECTION -->
+        <div class="table-section">
+            <div class="table-header">
+                <div class="table-title">Profit & Loss Statement</div>
+                <div class="table-actions">
+                    <button class="table-btn" title="Agregar">⊕</button>
+                    <button class="table-btn" title="Exportar">⬇</button>
+                    <button class="table-btn" title="Actualizar" onclick="fetchPLData()">⟳</button>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <div id="loading" class="loading">Cargando datos...</div>
+                <div id="error" class="error" style="display: none;"></div>
+                <table id="plTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Col 1</th>
+                            <th>Col 2</th>
+                            <th>Col 3</th>
+                            <th>Budget</th>
+                            <th>Cober %</th>
+                            <th>VS B $</th>
+                            <th>VS B %</th>
+                            <th>YTD</th>
+                            <th>YTD Budget</th>
+                            <th>Var</th>
+                            <th>Var %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -227,6 +586,16 @@
             username: 'ethnix',
             password: 'EthnixP&L-2025-'
         };
+
+        // Estado de filtros
+        let currentFilters = {
+            tipoVista: 'general',
+            periodo: 'ytd',
+            centroDistribucion: 'todos'
+        };
+
+        // Estado de expansión de categorías
+        const expandedCategories = new Set();
 
         function formatNumber(num) {
             if (num === null || num === undefined) return '-';
@@ -253,6 +622,74 @@
             return `Basic ${credentials}`;
         }
 
+        function updateMetrics(data) {
+            // Calcular métricas desde los datos
+            let netIncome = null;
+            let ebitda = null;
+            let grossMargin = null;
+            let grossMarginPct = null;
+            let coverage = null;
+
+            data.forEach(item => {
+                if (item.category === 'NET INCOME') {
+                    netIncome = item.data.ytd;
+                } else if (item.category === 'EBITDA') {
+                    ebitda = item.data.ytd;
+                } else if (item.category === 'Gross Margin') {
+                    grossMargin = item.data.ytd;
+                } else if (item.category === '% Gross Margin') {
+                    grossMarginPct = item.data.ytd;
+                }
+            });
+
+            // Net Income
+            if (netIncome !== null) {
+                document.getElementById('netIncomeValue').textContent = formatNumber(netIncome);
+                const netIncomeData = data.find(item => item.category === 'NET INCOME')?.data;
+                if (netIncomeData) {
+                    const change = netIncomeData.var || 0;
+                    const changePct = netIncomeData.varPct;
+                    const changeEl = document.getElementById('netIncomeChange');
+                    changeEl.className = `metric-change ${getColorClass(change)}`;
+                    changeEl.innerHTML = `${change >= 0 ? '↑' : '↓'} ${formatNumber(change)} ${changePct !== null ? `(${formatPercent(changePct)})` : ''}`;
+                }
+            }
+
+            // EBITDA
+            if (ebitda !== null) {
+                document.getElementById('ebitdaValue').textContent = formatNumber(ebitda);
+                const ebitdaData = data.find(item => item.category === 'EBITDA')?.data;
+                if (ebitdaData) {
+                    const change = ebitdaData.var || 0;
+                    const changePct = ebitdaData.varPct;
+                    const changeEl = document.getElementById('ebitdaChange');
+                    changeEl.className = `metric-change ${getColorClass(change)}`;
+                    changeEl.innerHTML = `${change >= 0 ? '↑' : '↓'} ${formatNumber(change)} ${changePct !== null ? `(${formatPercent(changePct)})` : ''}`;
+                }
+            }
+
+            // Gross Margin
+            if (grossMargin !== null) {
+                document.getElementById('grossMarginValue').textContent = formatNumber(grossMargin);
+                const grossMarginData = data.find(item => item.category === 'Gross Margin')?.data;
+                if (grossMarginData) {
+                    const change = grossMarginData.var || 0;
+                    const changePct = grossMarginData.varPct;
+                    const changeEl = document.getElementById('grossMarginChange');
+                    changeEl.className = `metric-change ${getColorClass(change)}`;
+                    changeEl.innerHTML = `${change >= 0 ? '↑' : '↓'} ${formatNumber(change)} ${changePct !== null ? `(${formatPercent(changePct)})` : ''}`;
+                }
+            }
+
+            // Coverage (usar coberPct de Sales)
+            const salesData = data.find(item => item.category === 'SALES')?.data;
+            if (salesData && salesData.coberPct !== null) {
+                coverage = salesData.coberPct;
+                document.getElementById('coverageValue').textContent = formatPercent(coverage);
+                document.getElementById('coverageProgress').style.width = `${Math.min(100, Math.max(0, coverage))}%`;
+            }
+        }
+
         async function fetchPLData() {
             const loadingEl = document.getElementById('loading');
             const errorEl = document.getElementById('error');
@@ -264,8 +701,7 @@
                 errorEl.style.display = 'none';
                 tableEl.style.display = 'none';
 
-                const tipo = document.getElementById('tipoVista').value;
-                const url = `${API_CONFIG.baseUrl}/pl?tipo=${tipo}`;
+                const url = `${API_CONFIG.baseUrl}/pl?tipo=${currentFilters.tipoVista}`;
 
                 const response = await fetch(url, {
                     method: 'GET',
@@ -284,6 +720,7 @@
                 const result = await response.json();
 
                 if (result.success && result.data) {
+                    updateMetrics(result.data);
                     renderTable(result.data);
                     loadingEl.style.display = 'none';
                     tableEl.style.display = 'table';
@@ -297,6 +734,16 @@
             }
         }
 
+        function toggleCategory(categoryName) {
+            if (expandedCategories.has(categoryName)) {
+                expandedCategories.delete(categoryName);
+            } else {
+                expandedCategories.add(categoryName);
+            }
+            // Re-render para actualizar estado
+            fetchPLData();
+        }
+
         function renderTable(data) {
             const tableBodyEl = document.getElementById('plTableBody');
             tableBodyEl.innerHTML = '';
@@ -304,14 +751,27 @@
             data.forEach(item => {
                 const isTotal = item.isTotal || false;
                 const isPercent = item.isPercent || false;
-                const rowClass = isTotal ? 'total-row' : '';
+                const hasSubcategories = item.subcategories && item.subcategories.length > 0;
+                const isExpanded = expandedCategories.has(item.category);
+                
+                let rowClass = '';
+                if (isTotal) rowClass = 'total-row';
+                else if (isPercent) rowClass = 'percent-row';
+
                 const d = item.data;
 
                 const row = document.createElement('tr');
                 row.className = rowClass;
 
+                const categoryCell = hasSubcategories 
+                    ? `<div class="category-cell" onclick="toggleCategory('${item.category}')">
+                        <span class="expand-icon ${isExpanded ? 'expanded' : ''}">▶</span>
+                        <span>${item.category}</span>
+                       </div>`
+                    : item.category;
+
                 row.innerHTML = `
-                    <td>${item.category}</td>
+                    <td>${categoryCell}</td>
                     <td class="${getColorClass(d.col1)}">${isPercent ? formatPercent(d.col1) : formatNumber(d.col1)}</td>
                     <td class="${getColorClass(d.col2)}">${isPercent ? formatPercent(d.col2) : formatNumber(d.col2)}</td>
                     <td class="${getColorClass(d.col3)}">${isPercent ? formatPercent(d.col3) : formatNumber(d.col3)}</td>
@@ -327,10 +787,11 @@
 
                 tableBodyEl.appendChild(row);
 
-                // Render subcategories
-                if (item.subcategories && item.subcategories.length > 0) {
+                // Render subcategories si está expandido
+                if (hasSubcategories && isExpanded) {
                     item.subcategories.forEach(subcat => {
                         const subRow = document.createElement('tr');
+                        subRow.className = 'subcategory-row';
                         const subD = subcat.data;
 
                         subRow.innerHTML = `
@@ -354,14 +815,28 @@
             });
         }
 
-        // Event listeners
-        document.getElementById('tipoVista').addEventListener('change', fetchPLData);
-        document.getElementById('periodo').addEventListener('change', fetchPLData);
-        document.getElementById('centroDistribucion').addEventListener('change', fetchPLData);
+        // Pills event listeners
+        function setupPills(containerId, filterKey) {
+            const container = document.getElementById(containerId);
+            const pills = container.querySelectorAll('.pill');
+            
+            pills.forEach(pill => {
+                pill.addEventListener('click', () => {
+                    pills.forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    currentFilters[filterKey] = pill.dataset.value;
+                    fetchPLData();
+                });
+            });
+        }
+
+        // Initialize pills
+        setupPills('tipoVistaPills', 'tipoVista');
+        setupPills('periodoPills', 'periodo');
+        setupPills('centroDistribucionPills', 'centroDistribucion');
 
         // Initial load
         fetchPLData();
     </script>
 </body>
 </html>
-
