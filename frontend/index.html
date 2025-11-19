@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethnix Group - P&L Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .controls {
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .control-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .control-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 200px;
+        }
+
+        .table-container {
+            margin: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #1e3a5f;
+            color: white;
+        }
+
+        th {
+            padding: 12px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        th:first-child {
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr.total-row {
+            background-color: #ffeaa7;
+            font-weight: 600;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        td {
+            padding: 10px 12px;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        td:first-child {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .subcategory {
+            padding-left: 30px !important;
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        .positive {
+            color: #28a745;
+        }
+
+        .negative {
+            color: #dc3545;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 4px;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+
+            .control-group select {
+                width: 100%;
+            }
+
+            .table-container {
+                margin: 10px;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            th, td {
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Ethnix Group - P&L USD</h1>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label for="tipoVista">Tipo Vista</label>
+            <select id="tipoVista">
+                <option value="general">General</option>
+                <option value="detallado">Detallado</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="periodo">Periodo</label>
+            <select id="periodo">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="centroDistribucion">Centro Distribución</label>
+            <select id="centroDistribucion">
+                <option value="todos">Todos</option>
+                <option value="lima">Lima</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <div id="loading" class="loading">Cargando datos...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <table id="plTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Col 1</th>
+                    <th>Col 2</th>
+                    <th>Col 3</th>
+                    <th>Budget</th>
+                    <th>Cober %</th>
+                    <th>VS B $</th>
+                    <th>VS B %</th>
+                    <th>YTD</th>
+                    <th>YTD Budget</th>
+                    <th>Var</th>
+                    <th>Var %</th>
+                </tr>
+            </thead>
+            <tbody id="plTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_CONFIG = {
+            baseUrl: 'http://localhost:5000/api',  // Cambiar en producción
+            username: 'ethnix',
+            password: 'password'  // Cambiar en producción
+        };
+
+        function formatNumber(num) {
+            if (num === null || num === undefined) return '-';
+            const absNum = Math.abs(num);
+            const formatted = absNum.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+            return num < 0 ? `(${formatted})` : formatted;
+        }
+
+        function formatPercent(num) {
+            if (num === null || num === undefined) return '-';
+            return num.toFixed(2) + '%';
+        }
+
+        function getColorClass(value) {
+            if (value === null || value === undefined) return '';
+            return value >= 0 ? 'positive' : 'negative';
+        }
+
+        function createBasicAuthHeader(username, password) {
+            const credentials = btoa(`${username}:${password}`);
+            return `Basic ${credentials}`;
+        }
+
+        async function fetchPLData() {
+            const loadingEl = document.getElementById('loading');
+            const errorEl = document.getElementById('error');
+            const tableEl = document.getElementById('plTable');
+            const tableBodyEl = document.getElementById('plTableBody');
+
+            try {
+                loadingEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                tableEl.style.display = 'none';
+
+                const tipo = document.getElementById('tipoVista').value;
+                const url = `${API_CONFIG.baseUrl}/pl?tipo=${tipo}`;
+
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': createBasicAuthHeader(API_CONFIG.username, API_CONFIG.password)
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Credenciales inválidas. Verifique usuario y contraseña.');
+                    }
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    renderTable(result.data);
+                    loadingEl.style.display = 'none';
+                    tableEl.style.display = 'table';
+                } else {
+                    throw new Error('Formato de datos inválido');
+                }
+            } catch (error) {
+                loadingEl.style.display = 'none';
+                errorEl.textContent = `Error: ${error.message}`;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function renderTable(data) {
+            const tableBodyEl = document.getElementById('plTableBody');
+            tableBodyEl.innerHTML = '';
+
+            data.forEach(item => {
+                const isTotal = item.isTotal || false;
+                const isPercent = item.isPercent || false;
+                const rowClass = isTotal ? 'total-row' : '';
+                const d = item.data;
+
+                const row = document.createElement('tr');
+                row.className = rowClass;
+
+                row.innerHTML = `
+                    <td>${item.category}</td>
+                    <td class="${getColorClass(d.col1)}">${isPercent ? formatPercent(d.col1) : formatNumber(d.col1)}</td>
+                    <td class="${getColorClass(d.col2)}">${isPercent ? formatPercent(d.col2) : formatNumber(d.col2)}</td>
+                    <td class="${getColorClass(d.col3)}">${isPercent ? formatPercent(d.col3) : formatNumber(d.col3)}</td>
+                    <td class="${getColorClass(d.budget)}">${isPercent ? formatPercent(d.budget) : formatNumber(d.budget)}</td>
+                    <td class="${getColorClass(d.coberPct)}">${formatPercent(d.coberPct)}</td>
+                    <td class="${getColorClass(d.vsBDollar)}">${isPercent ? formatPercent(d.vsBDollar) : formatNumber(d.vsBDollar)}</td>
+                    <td class="${getColorClass(d.vsBPct)}">${d.vsBPct !== null ? formatPercent(d.vsBPct) : '-'}</td>
+                    <td class="${getColorClass(d.ytd)}">${isPercent ? formatPercent(d.ytd) : formatNumber(d.ytd)}</td>
+                    <td class="${getColorClass(d.ytdBudget)}">${isPercent ? formatPercent(d.ytdBudget) : formatNumber(d.ytdBudget)}</td>
+                    <td class="${getColorClass(d.var)}">${isPercent ? formatPercent(d.var) : formatNumber(d.var)}</td>
+                    <td class="${getColorClass(d.varPct)}">${d.varPct !== null ? formatPercent(d.varPct) : '-'}</td>
+                `;
+
+                tableBodyEl.appendChild(row);
+
+                // Render subcategories
+                if (item.subcategories && item.subcategories.length > 0) {
+                    item.subcategories.forEach(subcat => {
+                        const subRow = document.createElement('tr');
+                        const subD = subcat.data;
+
+                        subRow.innerHTML = `
+                            <td class="subcategory">${subcat.name}</td>
+                            <td class="${getColorClass(subD.col1)}">${isPercent ? formatPercent(subD.col1) : formatNumber(subD.col1)}</td>
+                            <td class="${getColorClass(subD.col2)}">${isPercent ? formatPercent(subD.col2) : formatNumber(subD.col2)}</td>
+                            <td class="${getColorClass(subD.col3)}">${isPercent ? formatPercent(subD.col3) : formatNumber(subD.col3)}</td>
+                            <td class="${getColorClass(subD.budget)}">${isPercent ? formatPercent(subD.budget) : formatNumber(subD.budget)}</td>
+                            <td class="${getColorClass(subD.coberPct)}">${formatPercent(subD.coberPct)}</td>
+                            <td class="${getColorClass(subD.vsBDollar)}">${isPercent ? formatPercent(subD.vsBDollar) : formatNumber(subD.vsBDollar)}</td>
+                            <td class="${getColorClass(subD.vsBPct)}">${subD.vsBPct !== null ? formatPercent(subD.vsBPct) : '-'}</td>
+                            <td class="${getColorClass(subD.ytd)}">${isPercent ? formatPercent(subD.ytd) : formatNumber(subD.ytd)}</td>
+                            <td class="${getColorClass(subD.ytdBudget)}">${isPercent ? formatPercent(subD.ytdBudget) : formatNumber(subD.ytdBudget)}</td>
+                            <td class="${getColorClass(subD.var)}">${isPercent ? formatPercent(subD.var) : formatNumber(subD.var)}</td>
+                            <td class="${getColorClass(subD.varPct)}">${subD.varPct !== null ? formatPercent(subD.varPct) : '-'}</td>
+                        `;
+
+                        tableBodyEl.appendChild(subRow);
+                    });
+                }
+            });
+        }
+
+        // Event listeners
+        document.getElementById('tipoVista').addEventListener('change', fetchPLData);
+        document.getElementById('periodo').addEventListener('change', fetchPLData);
+        document.getElementById('centroDistribucion').addEventListener('change', fetchPLData);
+
+        // Initial load
+        fetchPLData();
+    </script>
+</body>
+</html>
+
