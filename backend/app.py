@@ -9,9 +9,10 @@ app = Flask(__name__)
 # CORS - permitir Vercel
 CORS(app, resources={
     r"/api/*": {
-        "origins": ["https://*.vercel.app", "http://localhost:*"],
-        "methods": ["GET", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"]
+        "origins": ["https://pl-dashboard-ethnix.vercel.app", "https://*.vercel.app", "http://localhost:*"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
     }
 })
 
